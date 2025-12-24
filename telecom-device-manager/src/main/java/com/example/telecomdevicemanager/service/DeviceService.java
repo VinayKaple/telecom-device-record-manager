@@ -57,9 +57,10 @@ public class DeviceService {
         if (request.brand() != null) device.setBrand(request.brand());
         if (request.state() != null) device.setState(request.state());
 
-        TDMResponse tdmResponse = TDMUtility.responseMapper(device);
-        LOGGER.info("Record updated for a device with id: "+ tdmResponse.id());
-        return tdmResponse;
+        Device savedEntity = repository.save(device);
+
+        LOGGER.info("Record updated for a device with id: "+ savedEntity.getId());
+        return TDMUtility.responseMapper(savedEntity);
     }
 
     public List<TDMResponse> getAll() {

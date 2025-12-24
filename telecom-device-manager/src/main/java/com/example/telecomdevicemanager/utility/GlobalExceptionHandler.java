@@ -1,6 +1,7 @@
 package com.example.telecomdevicemanager.utility;
 
 import jakarta.persistence.EntityNotFoundException;
+import org.apache.coyote.BadRequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -17,7 +18,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(IllegalStateException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleIllegalState(IllegalStateException ex) {
+    public ErrorResponse handleBadRequest(BadRequestException ex) {
         return new ErrorResponse("BAD_REQUEST", ex.getMessage());
     }
 

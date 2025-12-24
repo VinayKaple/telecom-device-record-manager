@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/tdm/api/")
+@RequestMapping("/tdm-api/")
 public class DeviceController {
 
     private final DeviceService deviceService;
@@ -24,26 +24,26 @@ public class DeviceController {
         this.deviceService = deviceService;
     }
 
-    @PostMapping(value = "/v1/device")
+    @PostMapping(value = "/v1/devices")
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Create a new device record", description = "Adds a new device to the system")
     public TDMResponse create(@Valid @RequestBody CreateRequest request){
         return deviceService.create(request);
     }
 
-    @GetMapping("/v1/device/{id}")
+    @GetMapping("/v1/devices/{id}")
     @Operation(summary = "Get a device record by id", description = "Gives details of an existing device")
     public TDMResponse get(@PathVariable Long id) {
         return deviceService.get(id);
     }
 
-    @PatchMapping("/v1/device/{id}")
+    @PatchMapping("/v1/devices/{id}")
     @Operation(summary = "Update a device record by id", description = "Updates details of an existing device")
     public TDMResponse update(@PathVariable Long id,@RequestBody UpdateRequest request) {
         return deviceService.update(id, request);
     }
 
-    @GetMapping("/v1/device")
+    @GetMapping("/v1/devices")
     @Operation(summary = "Get all devices record", description = "Gets details of all existing devices. Records can also be fetched by brand/state.")
     public List<TDMResponse> getAll(@RequestParam(required = false) String brand, @RequestParam(required = false) DeviceState state) {
 
@@ -52,7 +52,7 @@ public class DeviceController {
         return deviceService.getAll();
     }
 
-    @DeleteMapping("/v1/device/{id}")
+    @DeleteMapping("/v1/devices/{id}")
     @Operation(summary = "Delete a device record", description = "Deletes a device record from system by id")
     public ResponseEntity<Map<String, String>> delete(@PathVariable Long id) {
         deviceService.delete(id);
