@@ -5,6 +5,7 @@ import com.example.telecomdevicemanager.dto.TDMResponse;
 import com.example.telecomdevicemanager.entity.Device;
 import com.example.telecomdevicemanager.repository.DeviceRepository;
 import com.example.telecomdevicemanager.utility.TDMUtility;
+import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -28,7 +29,12 @@ public class DeviceService {
         device.setBrand(request.brand());
         device.setState(request.state());
         TDMResponse tdmResponse = TDMUtility.responseMapper(repository.save(device));
-        LOGGER.info("Record created for device with id: "+ tdmResponse.id());
+        LOGGER.info("Record created for a new device with id: "+ tdmResponse.id());
         return tdmResponse;
+    }
+
+    public TDMResponse get(Long id) {
+        return TDMUtility.responseMapper(repository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Device not found")));
     }
 }
