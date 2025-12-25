@@ -34,16 +34,19 @@ public class DeviceService {
         device.setBrand(request.brand());
         device.setState(request.state());
         TDMResponse tdmResponse = TDMUtility.responseMapper(repository.save(device));
-        LOGGER.info("Record created for a new device with id: "+ tdmResponse.id());
+        LOGGER.info("Record created for a new device with id: {}", tdmResponse.id());
         return tdmResponse;
     }
 
+    @Transactional(readOnly = true)
     public TDMResponse get(Long id) {
         return TDMUtility.responseMapper(repository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Device not found with id: "+id)));
     }
 
     public TDMResponse update(Long id, UpdateRequest request) {
+        //for high traffic application we can think of method-level thread safety
+        // or optimistic locking via @Version column for write operations
         Device device = repository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Device not found with id: "+id));
 
@@ -59,19 +62,22 @@ public class DeviceService {
 
         Device savedEntity = repository.save(device);
 
-        LOGGER.info("Record updated for a device with id: "+ savedEntity.getId());
+        LOGGER.info("Record updated for a device with id: {}", savedEntity.getId());
         return TDMUtility.responseMapper(savedEntity);
     }
 
+    @Transactional(readOnly = true)
     public List<TDMResponse> getAll() {
         return repository.findAll().stream().map(TDMUtility::responseMapper).toList();
     }
 
+    @Transactional(readOnly = true)
     public List<TDMResponse> getByBrand(String brand) {
 
         return repository.findByBrandIgnoreCase(brand).stream().map(TDMUtility::responseMapper).toList();
     }
 
+    @Transactional(readOnly = true)
     public List<TDMResponse> getByState(DeviceState state) {
 
         return repository.findByState(state).stream().map(TDMUtility::responseMapper).toList();
