@@ -6,6 +6,7 @@ import com.example.telecomdevicemanager.dto.UpdateRequest;
 import com.example.telecomdevicemanager.entity.Device;
 import com.example.telecomdevicemanager.entity.DeviceState;
 import com.example.telecomdevicemanager.repository.DeviceRepository;
+import com.example.telecomdevicemanager.utility.DeviceInUseException;
 import com.example.telecomdevicemanager.utility.TDMUtility;
 import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
@@ -52,7 +53,7 @@ public class DeviceService {
 
         if (device.getState() == DeviceState.IN_USE) {
             if (!Objects.equals(request.name(), device.getName()) || !Objects.equals(request.brand(), device.getBrand())) {
-                throw new IllegalStateException("Cannot update name or brand when device is in use.");
+                throw new DeviceInUseException("Cannot update name or brand when device is in use.");
             }
         }
 
@@ -86,7 +87,7 @@ public class DeviceService {
     public void delete(Long id) {
         Device device = repository.findById(id).orElseThrow(() -> new EntityNotFoundException("Device not found with id: "+id));
         if (device.getState() == DeviceState.IN_USE) {
-            throw new IllegalStateException("In-use devices cannot be deleted");
+            throw new DeviceInUseException("In-use devices cannot be deleted");
         }
         repository.delete(device);
     }
