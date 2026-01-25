@@ -16,6 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -36,7 +37,7 @@ public class DeviceServiceTest {
     @BeforeEach
     void setUp() {
         device = new Device();
-        device.setId(1L);
+        device.setId(UUID.fromString("550e8400-e29b-41d4-a716-446655440000"));
         device.setBrand("Apple");
         device.setState(DeviceState.valueOf("AVAILABLE"));
     }
@@ -79,7 +80,7 @@ public class DeviceServiceTest {
         when(repository.save(any(Device.class)))
                 .thenAnswer(invocation -> {
                     Device saved = invocation.getArgument(0);
-                    saved.setId(1L); // simulate DB-generated ID
+                    saved.setId(UUID.fromString("550e8400-e29b-41d4-a716-446655440000")); // simulate DB-generated ID
                     return saved;
                 });
 
@@ -88,7 +89,7 @@ public class DeviceServiceTest {
 
         // THEN
         assertNotNull(response);
-        assertEquals(1L, response.id());
+        assertEquals(UUID.fromString("550e8400-e29b-41d4-a716-446655440000"), response.id());
         assertEquals("iPhone 15", response.name());
         assertEquals("Apple", response.brand());
         assertEquals(DeviceState.AVAILABLE, response.state());

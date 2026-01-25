@@ -4,5 +4,5 @@ import com.example.telecomdevicemanager.entity.DeviceState;
 
 import java.time.Instant;
 
-public record TDMResponse(Long id, String name, String brand, DeviceState state, Instant creationTime) {
+public record TDMResponse(java.util.UUID id, String name, String brand, DeviceState state, Instant creationTime) {
 }
